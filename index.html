@@ -200,7 +200,7 @@
     .polaroids {
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: stretch;
       gap: clamp(8px, 2vw, 24px);
       margin: 55px auto 0;
       max-width: 720px;
@@ -210,7 +210,7 @@
     .polaroid {
       width: 29%;
       max-width: 185px;
-      padding: 9px 9px 16px;
+      padding: 9px 9px 13px;
       background: #fff;
       box-shadow: 0 9px 25px rgba(86, 55, 65, .15);
       transform: rotate(-7deg);
@@ -239,11 +239,13 @@
 
     .polaroid-caption {
       display: block;
-      padding-top: 8px;
+      padding-top: 9px;
       font-family: "Playfair Display", serif;
       font-size: .83rem;
+      line-height: 1.4;
       text-align: center;
       color: #806b73;
+      overflow-wrap: anywhere;
     }
 
     .floating-heart {
@@ -389,7 +391,7 @@
       border: 1px dashed #e9c8d3;
       border-radius: 4px;
       background: #fff8fa;
-      color: #977c86;
+      color: #80636f;
       font-family: "DM Sans", sans-serif;
       font-size: .82rem;
       line-height: 1.5;
@@ -572,11 +574,11 @@
       }
 
       .polaroid {
-        padding: 6px 6px 11px;
+        padding: 6px 6px 10px;
       }
 
       .polaroid-caption {
-        font-size: .7rem;
+        font-size: .72rem;
       }
 
       .floating-heart.one {
@@ -638,6 +640,10 @@
 
       .memory-comment {
         font-size: .72rem;
+      }
+
+      .polaroid-caption {
+        font-size: .67rem;
       }
     }
 
@@ -701,11 +707,11 @@
         </div>
         <div class="polaroid">
           <img src="Foto2.JPG" alt="Ein besonderer Moment mit Abla" fetchpriority="high">
-          <span class="polaroid-caption">Meine Abla</span>
+          <span class="polaroid-caption">2 autisten unter sich</span>
         </div>
         <div class="polaroid">
           <img src="Foto3.JPG" alt="Eine weitere Erinnerung mit Abla" fetchpriority="high">
-          <span class="polaroid-caption">Unbezahlbar ♥</span>
+          <span class="polaroid-caption">Cääääängiiiiiiz...😏</span>
         </div>
       </div>
     </section>
@@ -720,9 +726,7 @@
         </p>
       </div>
 
-      <div class="gallery" id="gallery">
-        <!-- Die 14 Fotos und Kommentarzeilen werden hier automatisch eingefügt. -->
-      </div>
+      <div class="gallery" id="gallery"></div>
     </section>
 
     <section class="letter-section" id="brief">
@@ -792,30 +796,25 @@
 
   <script>
     /*
-      FOTOS:
-      Lege Foto1.jpg bis Foto14.jpg in denselben GitHub-Ordner
-      wie diese index.html.
-
-      KOMMENTARE:
-      Die Kommentartexte sind Platzhalter. Wir können sie später
-      durch eure Insider und persönlichen Sprüche ersetzen.
+      Die Fotos müssen exakt Foto1.JPG bis Foto14.JPG heißen
+      und im selben Repository-Ordner wie index.html liegen.
     */
 
     const memories = [
-      { photo: "Foto1.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto2.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto3.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto4.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto5.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto6.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto7.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto8.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto9.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto10.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto11.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto12.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto13.JPG", comment: "Hier kommt später euer Insider hin." },
-      { photo: "Foto14.JPG", comment: "Hier kommt später euer Insider hin." }
+      { photo: "Foto1.JPG", comment: "Für immer ♡" },
+      { photo: "Foto2.JPG", comment: "2 autisten unter sich" },
+      { photo: "Foto3.JPG", comment: "Cääääängiiiiiiz...😏" },
+      { photo: "Foto4.JPG", comment: "Du und Dilo auf dem Weg zum JGA 🍷💫" },
+      { photo: "Foto5.JPG", comment: "Deine behinderten Bilder die du immer in die Familiengruppe schickst 😂" },
+      { photo: "Foto6.JPG", comment: "Baba mit Schopper-Psychose" },
+      { photo: "Foto7.JPG", comment: "Baba und Niko besoffen deeptalk 😂" },
+      { photo: "Foto8.JPG", comment: "Anne und Baba auf süß 🥰" },
+      { photo: "Foto9.JPG", comment: "Tuana und Jilien (Julien) der Kobold ☘️" },
+      { photo: "Foto10.JPG", comment: "auf lock auf eurer Baba Terrasse am chillen" },
+      { photo: "Foto11.JPG", comment: "Wir beide auf deiner Hochzeit ❤️ (mies besoffen)" },
+      { photo: "Foto12.JPG", comment: "Wellness-Time mit Männchen Niko" },
+      { photo: "Foto13.JPG", comment: "Kadro und Du ❤️" },
+      { photo: "Foto14.JPG", comment: "deine 2 süßen Schwesterlichen Tuana und Didem ❤️" }
     ];
 
     const gallery = document.getElementById("gallery");
@@ -835,12 +834,10 @@
       img.alt = `Erinnerung ${index + 1} mit Abla`;
       img.loading = "lazy";
 
-      // Falls ein Bild noch nicht hochgeladen wurde, bleibt ein hübscher Platzhalter.
       img.addEventListener("error", () => {
         img.removeAttribute("src");
         img.alt = `Foto ${index + 1} wird hier eingefügt`;
-        img.style.background =
-          "linear-gradient(135deg, #f9e2e9, #fff3e9)";
+        img.style.background = "linear-gradient(135deg, #f9e2e9, #fff3e9)";
         img.style.minHeight = "180px";
       }, { once: true });
 
@@ -866,7 +863,7 @@
 
         lightboxImage.src = memory.photo;
         lightboxImage.alt = img.alt;
-        lightboxCaption.textContent = `Erinnerung Nr. ${index + 1}`;
+        lightboxCaption.textContent = memory.comment;
         lightbox.classList.add("open");
         document.body.style.overflow = "hidden";
         document.getElementById("lightboxClose").focus();
@@ -894,7 +891,6 @@
       }
     });
 
-    // Kleine Herz-Animation, wenn man auf die Seite klickt.
     document.addEventListener("click", (event) => {
       if (event.target.closest("a, button")) return;
 
@@ -913,4 +909,3 @@
   </script>
 </body>
 </html>
-
