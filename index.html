@@ -36,11 +36,15 @@
       margin: 0;
       color: var(--text);
       background:
-        radial-gradient(circle at 10% 10%, #fff0f3 0, transparent 30%),
-        radial-gradient(circle at 90% 40%, #fff3e8 0, transparent 28%),
+        radial-gradient(ellipse at 10% 5%, rgba(255, 220, 229, 0.65), transparent 36%),
+        radial-gradient(ellipse at 95% 35%, rgba(255, 229, 210, 0.55), transparent 34%),
         var(--cream);
       font-family: "DM Sans", sans-serif;
       overflow-x: hidden;
+    }
+
+    body.intro-running {
+      overflow: hidden;
     }
 
     button {
@@ -56,6 +60,80 @@
       color: inherit;
     }
 
+    /* --------------------------------
+       CINEMATIC INTRO
+    -------------------------------- */
+
+    .intro-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 45%, #fff9fa 0%, #ffe8ed 45%, #f3c6d1 100%);
+      animation: intro-curtain 1.7s cubic-bezier(.7, 0, .2, 1) forwards;
+    }
+
+    .intro-aura {
+      position: absolute;
+      width: min(75vw, 440px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,0) 70%);
+      animation: aura-pulse 1.5s ease-out both;
+    }
+
+    .intro-heart {
+      position: relative;
+      color: var(--pink-dark);
+      font-size: clamp(3.5rem, 12vw, 6rem);
+      line-height: 1;
+      filter: drop-shadow(0 8px 20px rgba(200, 111, 137, .25));
+      animation: heart-arrive 1.35s cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    @keyframes intro-curtain {
+      0%, 65% {
+        opacity: 1;
+        visibility: visible;
+      }
+      100% {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    @keyframes heart-arrive {
+      0% {
+        opacity: 0;
+        transform: scale(.25) rotate(-20deg);
+      }
+      55% {
+        opacity: 1;
+        transform: scale(1.15) rotate(7deg);
+      }
+      75% {
+        transform: scale(.96) rotate(-3deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+      }
+    }
+
+    @keyframes aura-pulse {
+      0% { opacity: 0; transform: scale(.55); }
+      40% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: .7; transform: scale(1.3); }
+    }
+
+    /* --------------------------------
+       NAVIGATION
+    -------------------------------- */
+
     .topbar {
       position: sticky;
       top: 0;
@@ -64,9 +142,10 @@
       justify-content: center;
       gap: 12px;
       padding: 13px 16px;
-      background: rgba(255, 250, 245, 0.91);
+      background: rgba(255, 250, 245, 0.88);
       border-bottom: 1px solid rgba(200, 111, 137, 0.14);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
     .topbar a {
@@ -76,7 +155,7 @@
       color: var(--muted);
       padding: 8px 13px;
       border-radius: 999px;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.25s, color 0.25s, transform 0.25s;
     }
 
     .topbar a:hover,
@@ -86,15 +165,85 @@
       outline: none;
     }
 
+    /* --------------------------------
+       STARTSEITE / ANIMATION
+    -------------------------------- */
+
     .hero {
-      min-height: 88vh;
+      min-height: 91svh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 72px 22px 65px;
+      padding: 75px 22px 65px;
       text-align: center;
       position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(3px);
+    }
+
+    .hero::before {
+      width: min(70vw, 550px);
+      aspect-ratio: 1;
+      top: 4%;
+      left: -30%;
+      background: radial-gradient(circle, rgba(248, 199, 213, .28), transparent 70%);
+      animation: glow-drift 13s ease-in-out infinite alternate;
+    }
+
+    .hero::after {
+      width: min(75vw, 600px);
+      aspect-ratio: 1;
+      right: -35%;
+      bottom: -8%;
+      background: radial-gradient(circle, rgba(255, 219, 191, .27), transparent 70%);
+      animation: glow-drift 16s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes glow-drift {
+      from { transform: translate3d(0, 0, 0) scale(.9); }
+      to { transform: translate3d(35px, -20px, 0) scale(1.12); }
+    }
+
+    .hero-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      filter: blur(5px);
+      animation: reveal-up 1s cubic-bezier(.2, .7, .2, 1) forwards;
+      animation-delay: var(--delay, .5s);
+    }
+
+    @keyframes reveal-up {
+      0% {
+        opacity: 0;
+        transform: translateY(22px);
+        filter: blur(5px);
+      }
+      65% {
+        filter: blur(0);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
     }
 
     .eyebrow {
@@ -116,6 +265,7 @@
       font-size: clamp(2.6rem, 7vw, 5.3rem);
       line-height: 1.08;
       letter-spacing: -0.04em;
+      text-wrap: balance;
     }
 
     .hero-subtitle {
@@ -128,6 +278,7 @@
       color: var(--pink-dark);
       font-size: 1.4rem;
       margin: 25px 0 20px;
+      letter-spacing: .15em;
     }
 
     .polaroids {
@@ -138,27 +289,57 @@
       margin: 25px 0 15px;
       width: 100%;
       max-width: 680px;
+      perspective: 900px;
     }
 
     .polaroid {
       width: 29%;
       max-width: 190px;
       padding: 8px 8px 15px;
-      background: white;
+      background: rgba(255, 255, 255, .96);
       border-radius: 3px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 16px 40px rgba(125, 71, 88, .15);
+      opacity: 0;
+      transform: translateY(35px) rotate(0deg) scale(.9);
+      animation: polaroid-arrive .95s cubic-bezier(.16, 1, .3, 1) forwards;
+      animation-delay: var(--delay, 1.2s);
+      transition: transform .35s ease, box-shadow .35s ease;
+      will-change: transform, opacity;
     }
 
     .polaroid:nth-child(1) {
-      transform: rotate(-8deg) translateY(10px);
+      --delay: 1.25s;
+      --tilt: -8deg;
     }
 
     .polaroid:nth-child(2) {
-      transform: rotate(3deg) translateY(-9px);
+      --delay: 1.48s;
+      --tilt: 3deg;
     }
 
     .polaroid:nth-child(3) {
-      transform: rotate(8deg) translateY(12px);
+      --delay: 1.7s;
+      --tilt: 8deg;
+    }
+
+    @keyframes polaroid-arrive {
+      0% {
+        opacity: 0;
+        transform: translateY(35px) rotate(0) scale(.9);
+      }
+      70% {
+        opacity: 1;
+        transform: translateY(-5px) rotate(var(--tilt)) scale(1.02);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) rotate(var(--tilt)) scale(1);
+      }
+    }
+
+    .polaroid:hover {
+      transform: translateY(-8px) rotate(0deg) scale(1.04);
+      box-shadow: 0 22px 48px rgba(125, 71, 88, .2);
     }
 
     .polaroid img {
@@ -193,13 +374,50 @@
       font-size: 0.9rem;
       font-weight: 700;
       box-shadow: 0 7px 20px rgba(200, 111, 137, 0.2);
-      transition: transform 0.2s, background 0.2s;
+      transition: transform 0.25s, background 0.25s, box-shadow 0.25s;
     }
 
     .scroll-link:hover {
       background: #b85d78;
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(200, 111, 137, .28);
     }
+
+    .scroll-link:focus-visible {
+      outline: 3px solid var(--pink-dark);
+      outline-offset: 4px;
+    }
+
+    /* Dezente Lichtpunkte im Hintergrund */
+
+    .ambient {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .ambient span {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(200, 111, 137, .25);
+      box-shadow: 0 0 15px rgba(200, 111, 137, .25);
+      animation: ambient-float var(--duration, 8s) ease-in-out infinite alternate;
+      animation-delay: var(--delay, 0s);
+    }
+
+    @keyframes ambient-float {
+      0% { transform: translate3d(0, 12px, 0) scale(.7); opacity: .15; }
+      50% { opacity: .65; }
+      100% { transform: translate3d(10px, -24px, 0) scale(1.3); opacity: .3; }
+    }
+
+    /* --------------------------------
+       ALLGEMEINE ABSCHNITTE
+    -------------------------------- */
 
     .section {
       width: min(100% - 36px, 1000px);
@@ -224,7 +442,9 @@
       line-height: 1.7;
     }
 
-    /* Blätterbares Fotoalbum */
+    /* --------------------------------
+       BLÄTTERBARES FOTOALBUM
+    -------------------------------- */
 
     .album-wrap {
       max-width: 720px;
@@ -350,7 +570,9 @@
       margin-top: 15px;
     }
 
-    /* Persönlicher Brief */
+    /* --------------------------------
+       PERSÖNLICHER BRIEF
+    -------------------------------- */
 
     .letter-section {
       padding-top: 55px;
@@ -400,7 +622,9 @@
       font-size: 0.85rem;
     }
 
-    /* Kleines, festes Easter Egg */
+    /* --------------------------------
+       EASTER EGG
+    -------------------------------- */
 
     .easter-egg {
       position: fixed;
@@ -426,7 +650,9 @@
       transform: scale(1.07);
     }
 
-    /* Bildfenster */
+    /* --------------------------------
+       FOTO-LIGHTBOX
+    -------------------------------- */
 
     .image-modal {
       position: fixed;
@@ -438,10 +664,17 @@
       padding: 18px;
       background: rgba(36, 23, 29, 0.88);
       backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
     }
 
     .image-modal.open {
       display: flex;
+      animation: modal-fade .22s ease both;
+    }
+
+    @keyframes modal-fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .modal-content {
@@ -480,6 +713,10 @@
       cursor: pointer;
     }
 
+    /* --------------------------------
+       MOBILE
+    -------------------------------- */
+
     @media (max-width: 540px) {
       .topbar {
         gap: 2px;
@@ -492,9 +729,9 @@
       }
 
       .hero {
-        min-height: auto;
-        padding-top: 70px;
-        padding-bottom: 60px;
+        min-height: 91svh;
+        padding-top: 60px;
+        padding-bottom: 55px;
       }
 
       .polaroid {
@@ -554,9 +791,31 @@
       }
     }
 
+    /* Animationen bei reduzierter Bewegung ausschalten */
+
     @media (prefers-reduced-motion: reduce) {
       html {
         scroll-behavior: auto;
+      }
+
+      .intro-screen {
+        display: none;
+      }
+
+      .hero-reveal,
+      .polaroid {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        animation: none;
+      }
+
+      .hero::before,
+      .hero::after,
+      .ambient span,
+      .intro-heart,
+      .intro-aura {
+        animation: none;
       }
 
       *,
@@ -565,10 +824,32 @@
         transition-duration: 0.01ms !important;
       }
     }
+
+    /* Fallback: Inhalte bleiben sichtbar, falls Animationen blockiert werden */
+
+    .no-animation .hero-reveal {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      animation: none;
+    }
+
+    .no-animation .polaroid {
+      opacity: 1;
+      transform: rotate(var(--tilt, 0deg));
+      animation: none;
+    }
   </style>
 </head>
 
-<body>
+<body class="intro-running">
+
+  <!-- Kurzer visueller Einstieg -->
+  <div class="intro-screen" id="introScreen" aria-hidden="true">
+    <div class="intro-aura"></div>
+    <div class="intro-heart">♡</div>
+  </div>
+
   <nav class="topbar" aria-label="Seitennavigation">
     <a href="#start">Start</a>
     <a href="#album">Fotoalbum</a>
@@ -576,34 +857,58 @@
   </nav>
 
   <header class="hero" id="start">
-    <div class="eyebrow">Ein ganz besonderer Tag ♡</div>
-
-    <h1>Happy Birthday,<br>meine liebe Abla ❤️</h1>
-
-    <p class="hero-subtitle">Du bist einfach die Beste.</p>
-
-    <div class="heart-divider">♡ &nbsp; ♡ &nbsp; ♡</div>
-
-    <div class="polaroids" aria-label="Ein paar gemeinsame Erinnerungen">
-      <div class="polaroid">
-        <img src="Foto1.JPG" alt="Ein gemeinsames Erinnerungsfoto" fetchpriority="high">
-        <p>Für immer ♡</p>
-      </div>
-
-      <div class="polaroid">
-        <img src="Foto2.JPG" alt="Ein gemeinsames Erinnerungsfoto" fetchpriority="high">
-        <p>2 autisten unter sich</p>
-      </div>
-
-      <div class="polaroid">
-        <img src="Foto3.JPG" alt="Ein gemeinsames Erinnerungsfoto" fetchpriority="high">
-        <p>Cääääängiiiiiiz...😏</p>
-      </div>
+    <div class="ambient" aria-hidden="true">
+      <span style="left: 12%; top: 19%; --duration: 8s; --delay: .2s"></span>
+      <span style="left: 82%; top: 15%; --duration: 10s; --delay: 1.4s"></span>
+      <span style="left: 22%; top: 70%; --duration: 9s; --delay: .8s"></span>
+      <span style="left: 89%; top: 63%; --duration: 11s; --delay: 2s"></span>
+      <span style="left: 64%; top: 30%; --duration: 7s; --delay: 1s"></span>
+      <span style="left: 7%; top: 48%; --duration: 12s; --delay: 2.4s"></span>
+      <span style="left: 72%; top: 82%; --duration: 9s; --delay: .5s"></span>
     </div>
 
-    <div class="credit">Mit ganz viel Liebe entwickelt von deinem Bruder Emre</div>
+    <div class="hero-content">
+      <div class="eyebrow hero-reveal" style="--delay: .45s">
+        Ein ganz besonderer Tag ♡
+      </div>
 
-    <a class="scroll-link" href="#album">Unser Fotoalbum entdecken ↓</a>
+      <h1 class="hero-reveal" style="--delay: .75s">
+        Happy Birthday,<br>meine liebe Abla ❤️
+      </h1>
+
+      <p class="hero-subtitle hero-reveal" style="--delay: 1s">
+        Du bist einfach die Beste.
+      </p>
+
+      <div class="heart-divider hero-reveal" style="--delay: 1.12s">
+        ♡ &nbsp; ♡ &nbsp; ♡
+      </div>
+
+      <div class="polaroids" aria-label="Ein paar gemeinsame Erinnerungen">
+        <div class="polaroid">
+          <img src="Foto1.JPG" alt="Ein gemeinsames Erinnerungsfoto" fetchpriority="high">
+          <p>Für immer ♡</p>
+        </div>
+
+        <div class="polaroid">
+          <img src="Foto2.JPG" alt="Ein gemeinsames Erinnerungsfoto" fetchpriority="high">
+          <p>2 autisten unter sich</p>
+        </div>
+
+        <div class="polaroid">
+          <img src="Foto3.JPG" alt="Ein gemeinsames Erinnerungsfoto" fetchpriority="high">
+          <p>Cääääängiiiiiiz...😏</p>
+        </div>
+      </div>
+
+      <div class="credit hero-reveal" style="--delay: 2s">
+        Mit ganz viel Liebe entwickelt von deinem Bruder Emre
+      </div>
+
+      <a class="scroll-link hero-reveal" href="#album" style="--delay: 2.2s">
+        Unser Fotoalbum entdecken ↓
+      </a>
+    </div>
   </header>
 
   <main>
@@ -712,7 +1017,7 @@
     title=""
   >🕺</button>
 
-  <!-- Gemeinsames Bildfenster: Fotos können groß angezeigt werden -->
+  <!-- Bildfenster für Albumfotos und Easter Egg -->
   <div
     class="image-modal"
     id="imageModal"
@@ -728,6 +1033,25 @@
   </div>
 
   <script>
+    // Startanimation beim Öffnen
+    const introScreen = document.getElementById("introScreen");
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reducedMotion) {
+      document.body.classList.add("no-animation");
+      document.body.classList.remove("intro-running");
+      introScreen.remove();
+    } else {
+      // Fallback, damit der Einstieg die Seite nie dauerhaft verdeckt.
+      window.setTimeout(() => {
+        if (introScreen && introScreen.isConnected) {
+          introScreen.remove();
+        }
+        document.body.classList.remove("intro-running");
+      }, 1900);
+    }
+
     const photos = [
       { src: "Foto1.JPG", caption: "Für immer ♡" },
       { src: "Foto2.JPG", caption: "2 autisten unter sich" },
@@ -782,7 +1106,7 @@
     prevButton.addEventListener("click", () => showPhoto(currentPhoto - 1));
     nextButton.addEventListener("click", () => showPhoto(currentPhoto + 1));
 
-    // Auf dem Fotoalbum kann auch mit den Pfeiltasten geblättert werden.
+    // Tastatursteuerung fürs Album
     document.addEventListener("keydown", (event) => {
       const modalOpen = imageModal.classList.contains("open");
 
@@ -800,7 +1124,7 @@
       }
     });
 
-    // Bildfenster für Albumfotos und das Easter Egg
+    // Bildfenster
     const imageModal = document.getElementById("imageModal");
     const modalImage = document.getElementById("modalImage");
     const closeModalButton = document.getElementById("closeModal");
@@ -844,14 +1168,13 @@
       if (event.target === imageModal) closeImageModal();
     });
 
-    // Easter Egg: Klick auf das kleine Figürchen zeigt ausschließlich Foto15.JPG.
+    // Easter Egg: zeigt ausschließlich Foto15.JPG
     document.getElementById("dadButton").addEventListener("click", () => {
       openImageModal("Foto15.JPG", "");
     });
 
-    // Startzustand
+    // Album initialisieren
     showPhoto(0);
   </script>
 </body>
 </html>
-
